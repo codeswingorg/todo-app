@@ -30,4 +30,124 @@ main {
 .welcome-text {
   color: #e2e8f0;
   font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+/* Add todo box styles  */
+
+.add-todo-box {
+  border: 1px solid #475569;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.not-active-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 16px;
+}
+
+.add-todo-icon-container {
+  height: 25px;
+  width: 25px;
+  background-color: #fca5a5;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-todo-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.add-todo-box-text {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.active-todo-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 16px;
+}
+
+.active-todo-box > input {
+  border: none;
+  height: 32px;
+  background-color: transparent;
+  color: white;
+}
+
+.active-todo-box > input::placeholder {
+  color: #64748b;
+}
+
+.active-todo-box > input[type="date"]::-webkit-inner-spin-button,
+.active-todo-box > input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.todo-due-date-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  border: 1px solid #475569;
+  padding: 4px 12px;
+  border-radius: 8px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.todo-due-date-container > svg {
+  width: 15px;
+  height: 15px;
+}
+
+.todo-due-date-container > span {
+  font-size: 0.8rem;
+}
+
+.active-todo-box-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.btn {
+  border-radius: 4px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #e2e8f0;
+}
+
+.cancel-btn:hover {
+  background-color: #cbd5e1;
+}
+
+.submit-todo-btn {
+  background-color: #fca5a5;
+}
+.submit-todo-btn:hover {
+  background-color: #f87171;
+}
+
+/* Shared */
+
+.hidden {
+  display: none;
 }
