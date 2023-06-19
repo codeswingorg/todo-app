@@ -131,11 +131,11 @@ main {
   cursor: pointer;
 }
 
-.cancel-btn {
+.close-btn {
   background-color: #e2e8f0;
 }
 
-.cancel-btn:hover {
+.close-btn:hover {
   background-color: #cbd5e1;
 }
 
