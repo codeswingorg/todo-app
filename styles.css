@@ -41,6 +41,7 @@ main {
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 32px;
 }
 
 .not-active-box {
@@ -144,6 +145,60 @@ main {
 }
 .submit-todo-btn:hover {
   background-color: #f87171;
+}
+
+/* Individual Todos */
+
+.todo {
+  display: flex;
+  align-items: start;
+  gap: 9px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.todo > input[type="checkbox"] {
+  margin-top: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  appearance: none;
+  border: 1px solid #fca5a5;
+  cursor: pointer;
+}
+
+.todo > input[type="checkbox"]:checked {
+  border: 1px solid #f87171;
+  background-color: #f87171;
+}
+
+.todo-name {
+  color: #64748b;
+  font-size: 1.2rem;
+}
+
+.todo-description {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.todo-due-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  width: 100%;
+  color: #059669;
+}
+
+.todo-due-date > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.todo-due-date > span {
+  font-size: 0.9rem;
 }
 
 /* Shared */
