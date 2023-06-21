@@ -147,6 +147,14 @@ main {
   background-color: #f87171;
 }
 
+/* Section Text   */
+
+.sectionText {
+  color: #e2e8f0;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
 /* Individual Todos */
 
 .todo {
@@ -205,4 +213,8 @@ main {
 
 .hidden {
   display: none;
+}
+
+.markCompleted {
+  text-decoration: line-through;
 }

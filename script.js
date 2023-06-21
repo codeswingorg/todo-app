@@ -3,8 +3,10 @@ const nonActiveTodoBox = document.querySelector(".not-active-box");
 const selectDueDate = document.querySelector(".todo-due-date-container");
 const todoForm = document.querySelector(".active-todo-box");
 const closeForm = document.querySelector(".close-btn");
-const activeTodos = [];
-const completedTodos = [];
+const activeTodosDiv = document.querySelector(".activeTodos");
+const completedTodosDiv = document.querySelector(".completedTodos");
+let activeTodos = [];
+let completedTodos = [];
 const date = new Date();
 const currentTime = date.getHours();
 
@@ -18,6 +20,12 @@ const setGreeting = () => {
   } else {
     timeOfDay.textContent = "night";
   }
+};
+
+// randomId generator
+
+const randomId = () => {
+  return Math.ceil(new Date().getTime() + Math.random() * 9 + 1);
 };
 
 // Todo creation box section
@@ -62,7 +70,8 @@ const handleFormSubmission = (e) => {
   dueDateField.classList.add("hidden");
   selectDueDate.classList.remove("hidden");
 
-  displayTodos();
+  renderTodos(activeTodos, activeTodosDiv);
+  displayNumberOfTodos();
 };
 
 // If a user closes the form, do some clean up
@@ -75,19 +84,36 @@ const handleCloseForm = () => {
   todoForm.reset();
 };
 
-// Display todos from activeTodods array
+// Section Ttitle
 
-const displayTodos = () => {
-  const todosDiv = document.querySelector(".todos");
+const createAndUpdateTheCountElement = (section, todoArray) => {
+  const todoCountSpan = document.createElement("span");
+  todoCountSpan.textContent = todoArray.length;
+  section.appendChild(todoCountSpan);
 
+  section.classList.toggle("hidden", todoArray.length === 0);
+};
+
+const displayNumberOfTodos = () => {
+  const sectionText = document.querySelectorAll(".sectionText");
+
+  sectionText[0].textContent = "Active Todos - ";
+  createAndUpdateTheCountElement(sectionText[0], activeTodos);
+
+  sectionText[1].textContent = "Completed Todos - ";
+  createAndUpdateTheCountElement(sectionText[1], completedTodos);
+};
+
+const renderTodos = (todos, container) => {
   // Remove all existing todo elements
-  while (todosDiv.firstChild) {
-    todosDiv.removeChild(todosDiv.firstChild);
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
   }
 
-  activeTodos.forEach((currentTodo) => {
+  todos.forEach((currentTodo) => {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
+    todoDiv.id = currentTodo.id;
 
     // create the checkbox element
     const inputElement = document.createElement("input");
@@ -101,6 +127,7 @@ const displayTodos = () => {
     // Create the todo title element
     const todoTitle = document.createElement("p");
     todoTitle.classList.add("todo-name");
+
     todoTitle.textContent = currentTodo.title;
     todoInfoDiv.appendChild(todoTitle);
 
@@ -116,43 +143,59 @@ const displayTodos = () => {
     if (currentTodo.dueDate) {
       const todoDueDateElement = document.createElement("div");
       todoDueDateElement.classList.add("todo-due-date");
-      const SvgDateIcon = `
-      <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class="w-6 h-6"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-      />
-    </svg>`;
 
-      todoDueDateElement.innerHTML = SvgDateIcon;
       const dueDateElement = document.createElement("span");
       dueDateElement.textContent = currentTodo.dueDate;
       todoDueDateElement.appendChild(dueDateElement);
       todoInfoDiv.appendChild(todoDueDateElement);
     }
 
+    // Check if we are inside the completed todo div
+    if (container === completedTodosDiv) {
+      todoTitle.classList.add("markCompleted");
+      inputElement.checked = true;
+    }
+
     todoDiv.appendChild(todoInfoDiv);
-    todosDiv.appendChild(todoDiv);
+    container.appendChild(todoDiv);
   });
+
+  displayNumberOfTodos();
 };
 
-// randomId generator
+const toggleTodo = (id, source, destination) => {
+  const todoIndex = source.findIndex((todo) => todo.id === id);
 
-const randomId = () => {
-  return Math.ceil(new Date().getTime() + Math.random() * 9 + 1);
+  if (todoIndex !== -1) {
+    const [todoToMove] = source.splice(todoIndex, 1);
+    destination.push(todoToMove);
+    return true;
+  }
+
+  return false;
+};
+
+const toggleTodoCompletion = (e) => {
+  const todoId = Number(e.target.parentElement.id);
+
+  if (!toggleTodo(todoId, activeTodos, completedTodos)) {
+    toggleTodo(todoId, completedTodos, activeTodos);
+  }
+
+  renderTodos(activeTodos, activeTodosDiv);
+  renderTodos(completedTodos, completedTodosDiv);
 };
 
 // Event handlers
 
 nonActiveTodoBox.addEventListener("click", handleNonActiveTodoBoxClick);
+/*
+ * We use bubbling here and inside toggleTodoCompletion CB,
+ * we simply catch the correct element using the id
+ */
+
+activeTodosDiv.addEventListener("change", toggleTodoCompletion);
+completedTodosDiv.addEventListener("change", toggleTodoCompletion);
 selectDueDate.addEventListener("click", handleDatePickerClick);
 todoForm.addEventListener("submit", handleFormSubmission);
 closeForm.addEventListener("click", handleCloseForm);
@@ -160,3 +203,4 @@ closeForm.addEventListener("click", handleCloseForm);
 // On page init
 
 setGreeting();
+displayNumberOfTodos();
